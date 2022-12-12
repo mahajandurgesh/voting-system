@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class VoterAuth
+ * Servlet implementation class VoterReg
  */
-@WebServlet("/VoterAuth")
-public class VoterAuth extends HttpServlet {
+@WebServlet("/VoterReg")
+public class VoterReg extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public VoterAuth() {
+    public VoterReg() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,19 +41,26 @@ public class VoterAuth extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		Connection con=DbConnection.connect();
-		String email=request.getParameter("email");
+		String voter_name=request.getParameter("name");
+		String voter_email=request.getParameter("email");
 		String password=request.getParameter("password");
+		
 		try {
-			PreparedStatement psmt = con.prepareStatement("select * from voter where voter_email=? and password=?");
+			PreparedStatement psmt = con.prepareStatement("insert into voter values(?,?,?,?)");
+			psmt.setInt(1, 0);
+			psmt.setString(2, voter_name);
+			psmt.setString(3, voter_email);
+			psmt.setString(4, password);
+			
+			if(psmt.executeUpdate()==1){
+				response.sendRedirect("index.jsp");
+			}
+			else{
+				response.sendRedirect("failure.html");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		if(email.equals("abc@gmail.com") && password.equals("1234")){
-			response.sendRedirect("xyz.jsp");
-		}
-		else{
-			response.sendRedirect("index.jsp");
 		}
 	}
 
