@@ -3,6 +3,7 @@ package com.votingSystem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -45,15 +46,22 @@ public class VoterAuth extends HttpServlet {
 		String password=request.getParameter("password");
 		try {
 			PreparedStatement psmt = con.prepareStatement("select * from voter where voter_email=? and password=?");
+			psmt.setString(1,email);
+			psmt.setString(2,password);
+			ResultSet rs=psmt.executeQuery();
+			int voterId=-1;
+			while(rs.next()){
+				voterId=rs.getInt(1);
+			}
+			if(voterId<0){
+				response.sendRedirect("index.jsp");
+			}
+			else{
+				response.sendRedirect("voter.jsp?value="+Integer.toString(voterId));
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		if(email.equals("abc@gmail.com") && password.equals("1234")){
-			response.sendRedirect("xyz.jsp");
-		}
-		else{
-			response.sendRedirect("index.jsp");
 		}
 	}
 
