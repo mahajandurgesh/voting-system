@@ -13,6 +13,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </head>
 <body>
+<nav class="navbar navbar-dark bg-primary">
+  <!-- Navbar content -->
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.jsp">Anonymous Voting System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="adminLogin.jsp">Admin</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
 <div class="container login-container">
         <div class="row">
             <div class="col-md-6 login-form-1">
@@ -34,18 +49,18 @@
             </div>
             <div class="col-md-6 login-form-2">
                 <h3>Organizer Login</h3>
-                <form>
+                <form action="OrganizerAuth" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Email *" value="" />
+                        <input type="text" name="email" class="form-control" placeholder="Your Email *" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Your Password *" value="" />
+                        <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
                     </div>
                     <div class="form-group">
                         <input type="submit" class="btnSubmit" value="Login" />
                     </div>
                     <div class="form-group">
-                        <a href="#" class="ForgetPwd">New User? Register!</a>
+                        <a href="organizerReg.jsp" class="ForgetPwd">New User? Register!</a>
                     </div>
                 </form>
             </div>

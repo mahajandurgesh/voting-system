@@ -3,7 +3,6 @@ package com.votingSystem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class OrganizerAuth
+ * Servlet implementation class CreatePoll
  */
-@WebServlet("/OrganizerAuth")
-public class OrganizerAuth extends HttpServlet {
+@WebServlet("/CreatePoll")
+public class CreatePoll extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrganizerAuth() {
+    public CreatePoll() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,28 +40,35 @@ public class OrganizerAuth extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+		int oid=Integer.parseInt(request.getParameter("oid"));
 		Connection con=DbConnection.connect();
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
+		String pname=request.getParameter("name");
+		String op1=request.getParameter("op1");
+		String op2=request.getParameter("op2");
+		String op3=request.getParameter("op3");
+		String op4=request.getParameter("op4");
+		
 		try {
-			PreparedStatement psmt = con.prepareStatement("select * from organizer_login where oemail=? and opass=?");
-			psmt.setString(1,email);
-			psmt.setString(2,password);
-			ResultSet rs=psmt.executeQuery();
-			int oId=-1;
-			while(rs.next()){
-				oId=rs.getInt(1);
-			}
-			if(oId<0){
-				response.sendRedirect("index.jsp");
+			PreparedStatement psmt = con.prepareStatement("insert into polls values(?,?,?,?,?,?,?)");
+			psmt.setInt(1, 0);
+			psmt.setString(2, pname);
+			psmt.setInt(3, oid);
+			psmt.setString(4, op1);
+			psmt.setString(5, op2);
+			psmt.setString(6, op3);
+			psmt.setString(7, op4);
+			
+			if(psmt.executeUpdate()==1){
+				response.sendRedirect("createPoll.jsp?oid="+Integer.toString(oid));
 			}
 			else{
-				response.sendRedirect("organizer.jsp?value="+Integer.toString(oId));
+				response.sendRedirect("failure.html");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 }

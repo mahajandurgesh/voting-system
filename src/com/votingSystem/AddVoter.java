@@ -3,7 +3,6 @@ package com.votingSystem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class OrganizerAuth
+ * Servlet implementation class AddVoter
  */
-@WebServlet("/OrganizerAuth")
-public class OrganizerAuth extends HttpServlet {
+@WebServlet("/AddVoter")
+public class AddVoter extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrganizerAuth() {
+    public AddVoter() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,23 +40,21 @@ public class OrganizerAuth extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+		int pid=Integer.parseInt(request.getParameter("pid"));
 		Connection con=DbConnection.connect();
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
+		String vemail=request.getParameter("email");
+		
 		try {
-			PreparedStatement psmt = con.prepareStatement("select * from organizer_login where oemail=? and opass=?");
-			psmt.setString(1,email);
-			psmt.setString(2,password);
-			ResultSet rs=psmt.executeQuery();
-			int oId=-1;
-			while(rs.next()){
-				oId=rs.getInt(1);
-			}
-			if(oId<0){
-				response.sendRedirect("index.jsp");
+			PreparedStatement psmt = con.prepareStatement("insert into add_voters values(?,?,?,?)");
+			psmt.setInt(1, 0);
+			psmt.setString(2, vemail);
+			psmt.setInt(3, pid);
+			psmt.setString(4, "null");
+			if(psmt.executeUpdate()==1){
+				response.sendRedirect("addVoters.jsp?pid="+Integer.toString(pid));
 			}
 			else{
-				response.sendRedirect("organizer.jsp?value="+Integer.toString(oId));
+				response.sendRedirect("failure.html");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

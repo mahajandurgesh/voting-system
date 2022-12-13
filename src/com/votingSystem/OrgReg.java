@@ -3,7 +3,6 @@ package com.votingSystem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class OrganizerAuth
+ * Servlet implementation class OrgReg
  */
-@WebServlet("/OrganizerAuth")
-public class OrganizerAuth extends HttpServlet {
+@WebServlet("/OrgReg")
+public class OrgReg extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrganizerAuth() {
+    public OrgReg() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,22 +41,22 @@ public class OrganizerAuth extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		Connection con=DbConnection.connect();
-		String email=request.getParameter("email");
+		String org_name=request.getParameter("name");
+		String org_email=request.getParameter("email");
 		String password=request.getParameter("password");
+		
 		try {
-			PreparedStatement psmt = con.prepareStatement("select * from organizer_login where oemail=? and opass=?");
-			psmt.setString(1,email);
-			psmt.setString(2,password);
-			ResultSet rs=psmt.executeQuery();
-			int oId=-1;
-			while(rs.next()){
-				oId=rs.getInt(1);
-			}
-			if(oId<0){
+			PreparedStatement psmt = con.prepareStatement("insert into organizer_login values(?,?,?,?,?)");
+			psmt.setInt(1, 0);
+			psmt.setString(2, org_name);
+			psmt.setString(3, org_email);
+			psmt.setString(4, password);
+			psmt.setString(5, "Pending");
+			if(psmt.executeUpdate()==1){
 				response.sendRedirect("index.jsp");
 			}
 			else{
-				response.sendRedirect("organizer.jsp?value="+Integer.toString(oId));
+				response.sendRedirect("failure.html");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
