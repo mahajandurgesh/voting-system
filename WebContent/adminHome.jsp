@@ -38,8 +38,7 @@
           <tr>
             <th data-breakpoints="xs">Organizer ID</th>
             <th data-breakpoints="xs">Email</th>
-            <th data-breakpoints="xs">Status</th>
-            <th data-breakpoints="xs">View Polls</th>
+            <th data-breakpoints="xs">Status</th> 
             <th data-breakpoints="xs sm md">Action</th>
           </tr>
         </thead>
@@ -52,10 +51,9 @@
             	<%if(status.equals("Approved")){%>
             	<td><%=status %></td>
             	<%}else{ %>
-            	<td><a href="ApproveOrg?&value=<%=rs.getInt(1)%>">Approve</a></td>
+            	<td><a href="ApproveOrg?value=<%=rs.getInt(1)%>">Approve</a></td>
             	<%} %>
-            <td><a href="viewPolls.jsp?&value=<%=rs.getInt(1)%>">View</a></td>
-            <td><a href="DeleteOrg?&value=<%=rs.getInt(1)%>">Delete</a></td>
+            <td><a href="DeleteOrg?value=<%=rs.getInt(1)%>">Delete</a></td>
           </tr>
           <%} %>
         </tbody>

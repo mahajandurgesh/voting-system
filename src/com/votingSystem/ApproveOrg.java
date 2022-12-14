@@ -3,7 +3,6 @@ package com.votingSystem;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class OrganizerAuth
+ * Servlet implementation class ApproveOrg
  */
-@WebServlet("/OrganizerAuth")
-public class OrganizerAuth extends HttpServlet {
+@WebServlet("/ApproveOrg")
+public class ApproveOrg extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrganizerAuth() {
+    public ApproveOrg() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,6 +32,23 @@ public class OrganizerAuth extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		Connection con=DbConnection.connect();
+		int oid=Integer.parseInt(request.getParameter("value"));
+	
+		try {
+			PreparedStatement psmt = con.prepareStatement("update organizer_login set status='Approved' where oid=?");
+			psmt.setInt(1, oid);
+			if(psmt.executeUpdate()==1){
+				response.sendRedirect("adminHome.jsp");
+			}
+			else{
+				response.sendRedirect("failure.jsp");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -41,30 +57,6 @@ public class OrganizerAuth extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-		Connection con=DbConnection.connect();
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
-		try {
-			PreparedStatement psmt = con.prepareStatement("select * from organizer_login where oemail=? and opass=?");
-			psmt.setString(1,email);
-			psmt.setString(2,password);
-			ResultSet rs=psmt.executeQuery();
-			int oId=-1;
-			String status=null;
-			while(rs.next()){
-				oId=rs.getInt(1);
-				status=rs.getString(5);
-			}
-			if(oId<0 || status.equals("Pending")){
-				response.sendRedirect("index.jsp");
-			}
-			else{
-				response.sendRedirect("organizer.jsp?value="+Integer.toString(oId));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

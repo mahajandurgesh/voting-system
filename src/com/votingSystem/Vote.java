@@ -33,10 +33,8 @@ public class Vote extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("IN Vote");
 		Connection con=DbConnection.connect();
 		String op=request.getParameter("op");
-		System.out.println("OP : "+op);
 		int vid=Integer.parseInt(request.getParameter("vid"));
 		int pid=Integer.parseInt(request.getParameter("pid"));
 		
@@ -56,7 +54,6 @@ public class Vote extends HttpServlet {
 			psmt.executeUpdate();
 			String salt=Salt.getSalt(op.length());
 			String saltedVote=op+salt;
-			System.out.println("Salted Vote : "+saltedVote);
 			PreparedStatement psmt1 = con.prepareStatement("insert into result values(?,?,?,?,aes_encrypt(?,?),?)");
 			psmt1.setInt(1, 0);
 			psmt1.setInt(2, vid);
